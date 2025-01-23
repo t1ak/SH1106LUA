@@ -46,3 +46,12 @@ fb.print(fn, "Hello from NodeMCU!")
 sh1106.show(fb.buf)
 
 :-)
+
+based on the code provided by derf
+
+https://github.com/derf/esp8266-nodemcu-ssd1306/tree/main
+
+tech info for SH1106:
+
+https://www.crystalfontz.com/controllers/datasheet-viewer.php?id=468
+
