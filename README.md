@@ -43,8 +43,6 @@ fb.init(132, 64) -- initialize framebuffer for 128x64 pixels
 
 fb.print(fn, "Hello from NodeMCU!")
 
-sh1106.show(fb.buf)
-
 :-)
 
 based on the code provided by derf
