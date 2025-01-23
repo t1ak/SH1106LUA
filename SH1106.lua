@@ -1,4 +1,4 @@
--- 102 drv SH1106 --date= 2025-01-23 10:39:50
+-- 102 drv SH1106 --date= 2025-01-23 16:10:32
 local sh1106 = {} --date= 2025-01-21 22:17:42
 
 local s_CONTRAST = 0x81
@@ -54,7 +54,21 @@ function sh1106.contrast(contrast)
 	end
 end
 
-function sh1106.showT(fb)
+function sh1106.show8(fb)
+	local txbuf = {0x40}
+	local idx=2
+	for i = 1, #fb do
+	  txbuf[idx]=fb[i]
+	  idx=idx+1
+	end	  
+	  sh1106.wc(0xb0+rowGlb) -- + row) -- set page address 0-7
+    sh1106.wc(2+LxGlb())  -- set low col address
+    sh1106.wc(16+HxGlb()) -- + col) -- set high col address
+		sh1106.wd(txbuf)		
+	xGlb=xGlb+(#fb)
+end
+
+function sh1106.show16(fb)
 	local txbuf = {0x40}
 	local idx=2
 	for i = 1, #fb, 2 do
@@ -62,8 +76,8 @@ function sh1106.showT(fb)
 	  idx=idx+1
 	end	  
 	  sh1106.wc(0xb0+rowGlb) -- + row) -- set page address 0-7
-    sh1106.wc(2)  -- set low col address
-    sh1106.wc(16) -- + col) -- set high col address
+    sh1106.wc(2+LxGlb())  -- set low col address
+    sh1106.wc(16+HxGlb()) -- + col) -- set high col address
 		sh1106.wd(txbuf)
 		
 		txbuf = {0x40} 
@@ -73,9 +87,11 @@ function sh1106.showT(fb)
 	  idx=idx+1
 	end
 	  sh1106.wc(0xb0+rowGlb+1) -- + row)   
-    sh1106.wc(2)  -- set low col address
-    sh1106.wc(16) -- + col) -- set high col address
+    sh1106.wc(2+LxGlb())  -- set low col address
+    sh1106.wc(16+HxGlb()) -- + col) -- set high col address
 		sh1106.wd(txbuf)
+		
+	xGlb=xGlb+(#fb/2)
 end
 
 function sh1106.show(fb)
@@ -113,4 +129,9 @@ function sh1106.ClearScreen(war)
     sh1106.wd(txbuf)
   end  
 end
+
+function sh1106.ScreenON(war) -- war: 0 lub 1
+    sh1106.wc(s_DISP+war)
+end
+
 return sh1106
